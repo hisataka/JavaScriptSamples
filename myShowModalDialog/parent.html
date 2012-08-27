@@ -1,0 +1,23 @@
+<html>
+<head>
+	<script type="text/javascript" src="jquery-1.4.3.min.js"></script>
+	<script type="text/javascript" src="blockUI.js"></script>
+	<script>
+	// 擬似的なモーダルダイアログ
+	function myShowModalDialog(url, name, param) {
+		$('body').unblock({fadeOut:0}).block({ message: null });
+		var winObj = window.open(url,name,param);
+		unloadInterval = setInterval(function() {
+			if (!winObj || winObj.closed) {
+				clearInterval(unloadInterval);	
+				$('body').unblock();
+			}
+		},500);
+	}
+</script>
+</head>
+<body>
+<h1>parent</h1>
+<input type='button' value='open' onclick='myShowModalDialog("child.html","child", "width=400, height=300, menubar=no, toolbar=no, scrollbars=yes");' />
+</body>
+</html>
