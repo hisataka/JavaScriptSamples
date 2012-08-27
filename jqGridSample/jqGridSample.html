@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="stylesheet" href="./jquery/jquery-ui-1.8.12.custom/css/ui-lightness/jquery-ui-1.8.12.custom.css" type="text/css" />
+	<link rel="stylesheet" href="./jquery/jquery.jqGrid-4.0.0/css/ui.jqgrid.css" type="text/css" />
+	
+	<script type="text/javascript" src="./jquery/jquery-1.5.2.min.js"></script>
+	<script type="text/javascript" src="./jquery/jquery.jqGrid-4.0.0/js/i18n/grid.locale-ja.js"></script>
+	<script type="text/javascript" src="./jquery/jquery.jqGrid-4.0.0/js/jquery.jqGrid.min.js"></script>
+	<script type="text/javascript">
+
+var last_id = null;
+
+	$(document).ready(function() {
+		var mydata = [
+			{comp_code:"CD1", comp_name:"株式会社シー", comp_kana:"カブシキカイシャシー"},
+			{comp_code:"CD2", comp_name:"ビー株式会社", comp_kana:"ビーカブシキカイシャ"},
+			{comp_code:"CD3", comp_name:"有限会社エー", comp_kana:"ユウゲンガイシャエー"},
+		];
+
+		$("#list").jqGrid({
+
+			datatype: "local",
+			colNames:['コード', '会社名', 'カナ'],
+			colModel:[
+				{name:'comp_code',editable:true},
+				{name:'comp_name',editable:true},
+				{name:'comp_kana',editable:true},
+			],
+
+			// 行がクリックされたら編集状態にする
+			onSelectRow: function(id)
+			{
+				if(id && id!==last_id)
+				{
+					jQuery('#list').saveRow(last_id, function(){alert("更新成功"); return true;}, location.href);
+					jQuery('#list').editRow(id);
+					last_id=id;
+				}
+			},
+
+			multiselect: false,
+			caption: '会社一覧',
+			pager: $('#pager')
+		})
+
+	for(var i=0;i<=mydata.length;i++)
+		jQuery("#list").addRowData(undefined,mydata[i]);
+});
+	</script>
+</head>
+<body>
+	<table id="list" class="scroll" cellpadding="0" cellspacing="0"></table>
+	<div id="pager" class="scroll" style="text-align:center;"></div> 
+</body>
+</html>
