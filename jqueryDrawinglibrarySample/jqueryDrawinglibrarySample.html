@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<script type="text/javascript" src="javascript/lib/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="javascript/lib/jquery-ui-1.8.5.custom.min.js"></script>
+		<script type="text/javascript" src="javascript/lib/jquery.drawinglibrary.js"></script>
+		<script type="text/javascript" src="javascript/lib/jquery.svg.js"></script>
+		
+		<script type="text/javascript">
+		var count
+		count = 0;
+		
+		function allClear() {
+			for(var i = 0; i < count; i ++) {
+				$("#e" + i).remove();
+			}
+			count = 0;
+		}
+		function add() {
+			//DIVタグを生成
+			$("#target").append("<div id='e" + count + "' style='width:55px;height:55px;'></div>");
+			
+			//要素を生成
+			$("#e" + count).drawRect(1,1,50,50);
+			$("#e" + count).draggable({
+									containment: 'parent'
+									, stop:function(e, ui){
+ 										alert(ui.position.top + "," +  ui.position.left + "," + ui.position.right);
+									}
+						});
+						
+			count = count + 1;
+		}
+		
+		$(document).ready(function(){
+			$('#target').selectable();
+		});
+		
+		</script>
+	</head>
+	<body>
+		<button onclick="add();" >配置</button>
+		<button onclick="allClear();" >クリア</button>
+		<div id='target' style="border-style: solid;"></div>
+	</body>
+</html>
