@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>DML Breaker 2.0</title>
+        <link rel="stylesheet" type="text/css" href="ext/resources/css/ext-all.css" />
+        <script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="ext/ext-all.js"></script>
+        <script type="text/javascript" src="config.js"></script>
+        <script type="text/javascript" src="ui.js"></script>
+        <script type="text/javascript" src="core.js"></script>
+        <script type="text/javascript" src="keyword.js"></script>
+        <script type="text/javascript" src="oracleKeyword.js"></script>
+		<script type="text/javascript" src="jquery-1.5.2.min.js"></script>
+		<script type="text/javascript">
+		$(function() {
+			//ロードされるまで待機
+			var timer = setInterval(function () {
+				if ($('.x-toolbar-left-row')) {
+					loaded();
+					clearInterval(timer);
+				}
+			}, 100);
+			
+			function loaded() {
+				//ボタン埋め込み
+				$('.x-toolbar-left-row').append('<td><input type="button" value="パラメータ読込" onclick="outSql();" /></td>');
+			}
+			
+		});
+		
+		function outSql() {
+			//パラメータ取得
+			var paramText = prompt("パラメータを入力");
+			if(!paramText) return;
+			//タイプ取得
+			var typeText = prompt("タイプを入力");
+			if(!typeText) return;
+
+			//パラメータを変換
+			paramText = replaceParam(paramText, typeText);
+			//出力SQL変換
+			replaceOutTextarea(paramText);
+		}
+
+		function replaceParam(paramText, typeText) {
+			var outString = "";
+			var params = paramText.split(",");
+			var types = typeText.split(",");
+			
+			for(var i = 0; i < params.length; i ++) {
+				var param = params[i].replace(/(^\s+)|(\s+$)/g, "");
+				var type = types[i].replace(/(^\s+)|(\s+$)/g, "");
+				if(type == 'java.lang.String') {
+					param = '\'' + param + '\'';
+				}
+				outString = outString + param;
+				if (i < params.length - 1) {
+					outString = outString + ',';
+				}
+			}
+			return outString;
+		}
+
+		function replaceOutTextarea(paramText) {
+			//入力SQLを取得
+			var outSql = $('#outTextarea').val();
+			//パラメータを取得
+			var params = paramText.split(",");
+		
+			for(var i = 0; i < params.length; i ++) {
+				var param = params[i].replace(/(^\s+)|(\s+$)/g, "");
+				outSql = outSql.replace(/\?/, param);
+			}
+			$('#outTextarea').val(outSql);
+		}
+		
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
